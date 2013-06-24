@@ -1,0 +1,16 @@
+test.sqlite
+sdk/rb/.*
+sdk/rb/*.lock
+sdk/rb/bin
+sdk/rb/vendor
+*.swp
+settings_local.py
+PYENV
+*.swo
+*.pyc
+*.pyo
+*~
+.\#*
+\#*\#
+var/
+publiclib.py
