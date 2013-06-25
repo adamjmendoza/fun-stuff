@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+from collections import deque
 
 class BSTNode(object):
     def __init__(self, key=None, parent=None):
@@ -36,6 +37,7 @@ class BSTNode(object):
 class BST(object):
     def __init__(self, root=None):
         self.root = root
+        self.depth = 1 if root else 0
 
     def search(self, key):
         current_node = self.root
@@ -53,6 +55,7 @@ class BST(object):
             self.root = BSTNode(key=key)
             return
         current_node = self.root
+        depth = 1
         while current_node is not None:
             if key < current_node.key:
                 if current_node.left is None:
@@ -60,14 +63,17 @@ class BST(object):
                     current_node = None
                 else:
                     current_node = current_node.left
+                    depth += 1
             elif key > current_node.key:
                 if current_node.right is None:
                     current_node.right = BSTNode(key=key, parent=current_node)
                     current_node = None
                 else:
                     current_node = current_node.right
+                    depth += 1
             else:
                 current_node = None
+        self.depth = max(depth, self.depth)
 
     def immediate_predecessor(self, node):
         node = node.left
@@ -110,6 +116,26 @@ class BST(object):
         if splice_node != delete_node:
             delete_node.key = splice_node.key
 
+    def graph(self):
+        current_height = 0
+        pad = 80
+        q = deque([(self.root, 1)])
+        g = ""
+        while len(q):
+            node, height = q.popleft()
+            if height > current_height:
+                current_height = height
+                pad /= 2
+                g += "\n{}".format(" "*pad)
+            if node:
+                q.append((node.left, height+1))
+                q.append((node.right, height+1))
+                g += "{}{}".format(node.key, " "*pad*2)
+            else:
+                g += "{}".format(" "*(pad*2+2))
+        return g
+                
+
     def inorder(self):
         if self.root:
             return self.root.inorder()
@@ -124,11 +150,15 @@ def main(args):
     tree = BST()
     tree.insert(10)
     tree.insert(1)
+    tree.insert(2)
+    tree.insert(0)
     tree.insert(12)
     tree.insert(11)
     tree.insert(20)
+    tree.insert(23)
     print tree
     print tree.inorder()
+    print tree.graph()
     
 
 if (__name__ == '__main__'):
