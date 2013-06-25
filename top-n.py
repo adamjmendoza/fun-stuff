@@ -5,7 +5,7 @@ from random import randint
 
 def gen_sample(size=1000, lower_bound=0, upper_bound=1000, n_max=10):
     array = [randint(lower_bound, upper_bound) for x in xrange(0, size)]
-    for i in xrange(10):
+    for i in xrange(n_max):
         array[i] = randint(upper_bound+1, upper_bound+n_max)
     return array
 
