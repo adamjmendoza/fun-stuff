@@ -26,20 +26,20 @@ ELEMENTS = ['ac', 'ag', 'al', 'am', 'ar', 'as', 'at', 'au', \
             'y', 'yb', \
             'zn', 'zr',]
 
-def is_fragment(fragment, elements=None):
+def is_fragment(fragment, elements=None, solutions=None):
     if not elements:
         elements = []
+    if not solutions:
+        solutions = []
 
     for i in range(1, 4):
         if len(fragment) >= i:
             if fragment[0:i] in ELEMENTS:
                 if len(fragment[i:]) == 0:
-                    return elements+[fragment[0:i]]
+                    solutions.append(elements+[fragment[0:i]])
                 else:
-                    r = is_fragment(fragment[i:], elements+[fragment[0:i]])
-                    if r is not None:
-                        return r
-    return None
+                    solutions = is_fragment(fragment[i:], elements+[fragment[0:i]], solutions)
+    return solutions
             
 def main(args):
     word = args[0]
