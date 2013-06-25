@@ -9,7 +9,7 @@ class Heap(object):
 
     def build_heap(self):
         self.size = len(self.values)
-        for i in xrange(len(self.values), 0, -1):
+        for i in xrange(len(self.values)/2, 0, -1):
             self.heapify(i-1)
 
     def parent(self, node):
