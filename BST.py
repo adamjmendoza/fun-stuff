@@ -35,9 +35,11 @@ class BSTNode(object):
         return '( {} <{}> {} )'.format(self.left or '*', self.key, self.right or '*')
 
 class BST(object):
-    def __init__(self, root=None):
+    def __init__(self, root=None, values=None):
         self.root = root
         self.depth = 1 if root else 0
+        for v in values:
+            self.insert(v)
 
     def search(self, key):
         current_node = self.root
@@ -117,24 +119,32 @@ class BST(object):
             delete_node.key = splice_node.key
 
     def graph(self):
-        current_height = 0
-        pad = 80
-        q = deque([(self.root, 1)])
+        if not self.root: return ""
+        pad = 160
+        q = deque([(self.root, 0, 1)])
+        next_q = deque()
+        prev_data = None
         g = ""
         while len(q):
-            node, height = q.popleft()
-            if height > current_height:
-                current_height = height
-                pad /= 2
-                g += "\n{}".format(" "*pad)
+            node, height, number = q.popleft()
             if node:
-                q.append((node.left, height+1))
-                q.append((node.right, height+1))
-                g += "{}{}".format(node.key, " "*pad*2)
-            else:
-                g += "{}".format(" "*(pad*2+2))
+                if node.left:
+                    next_q.append((node.left, height+1, 2*number))
+                if node.right:
+                    next_q.append((node.right, height+1, 2*number+1))
+                if prev_data is None:
+                    pad /= 2
+                    g += " "*pad
+                    g += "{}{}".format(" "*2*pad*(number-pow(2, height)), node.key)
+                else:
+                    g += "{}{}".format(" "*2*pad*(number-prev_data[2]), node.key)
+                prev_data = (node, height, number)
+            if not len(q):
+                q.extend(next_q)
+                next_q.clear()
+                prev_data = None
+                g += "\n"
         return g
-                
 
     def inorder(self):
         if self.root:
@@ -147,15 +157,7 @@ class BST(object):
         return u'{}'.format(self.root)
 
 def main(args):
-    tree = BST()
-    tree.insert(10)
-    tree.insert(1)
-    tree.insert(2)
-    tree.insert(0)
-    tree.insert(12)
-    tree.insert(11)
-    tree.insert(20)
-    tree.insert(23)
+    tree = BST(values=(7, 4, 3, 2, 6, 11, 9, 18, 14, 12, 17, 19, 22, 20))
     print tree
     print tree.inorder()
     print tree.graph()
