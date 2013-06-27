@@ -78,16 +78,28 @@ class BST(object):
         self.depth = max(depth, self.depth)
 
     def immediate_predecessor(self, node):
-        node = node.left
-        while node.right is not None:
-            node = node.right
-        return node
+        if node.left:
+            node = node.left
+            while node.right is not None:
+                node = node.right
+            return node
+        else:
+            p = node.parent
+            while p is not None and node == p.left:
+                node = p
+                p = node.parent
 
     def immediate_successor(self, node):
-        node = node.right
-        while node.left is not None:
-            node = node.left
-        return node
+        if node.right:
+            node = node.right
+            while node.left is not None:
+                node = node.left
+            return node
+        else:
+            p = node.parent
+            while p is not None and node == p.right:
+                node = p
+                p = node.parent
 
     def delete(self, key):
         delete_node = self.search(key)
@@ -120,7 +132,7 @@ class BST(object):
 
     def graph(self):
         if not self.root: return ""
-        pad = 160
+        pad = 128                        # powers of two work best
         q = deque([(self.root, 0, 1)])
         next_q = deque()
         prev_data = None
@@ -158,10 +170,11 @@ class BST(object):
 
 def main(args):
     tree = BST(values=(7, 4, 3, 2, 6, 11, 9, 18, 14, 12, 17, 19, 22, 20))
-    print tree
-    print tree.inorder()
     print tree.graph()
-    
+    tree.delete(3)
+    tree.delete(22)
+    print '#'*128
+    print tree.graph()
 
 if (__name__ == '__main__'):
     main(sys.argv[1:])
