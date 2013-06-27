@@ -130,6 +130,38 @@ class BST(object):
         if splice_node != delete_node:
             delete_node.key = splice_node.key
 
+    def rotate_left(self, x):
+        y = x.right
+        x.right = y.left
+        if y.left is not None:
+            y.left.parent = x
+        y.parent = x.parent
+        if x.parent is None:
+            self.root = y
+        else:
+            if x.is_left_child():
+                y.parent.left = y
+            else:
+                y.parent.right = y
+        y.left = x
+        x.parent = y
+
+    def rotate_right(self, y):
+        x = y.left
+        y.left = x.right
+        if y.left is not None:
+            y.left.parent = x
+        x.parent = y.parent
+        if y.parent is None:
+            self.root = x
+        else:
+            if y.is_left_child():
+                x.parent.left = x
+            else:
+                x.parent.right = x
+        x.right = y
+        y.parent = x
+
     def graph(self):
         if not self.root: return ""
         pad = 128                        # powers of two work best
@@ -171,9 +203,12 @@ class BST(object):
 def main(args):
     tree = BST(values=(7, 4, 3, 2, 6, 11, 9, 18, 14, 12, 17, 19, 22, 20))
     print tree.graph()
-    tree.delete(3)
-    tree.delete(22)
     print '#'*128
+    node = tree.search(11)
+    tree.rotate_left(node)
+    print tree.graph()
+    print '#'*128
+    tree.rotate_right(node)
     print tree.graph()
 
 if (__name__ == '__main__'):
