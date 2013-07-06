@@ -15,7 +15,7 @@ int partition(int *data, int p, int r) {
 	} while (data[j] > pivot);
 	do {
 	    i += 1;
-	} while (data[i] < pivot );
+	} while (data[i] < pivot);
 	if (i < j) {
 	    int tmp = data[i];
 	    data[i] = data[j];
@@ -61,6 +61,7 @@ int main(int argc, char **argv) {
 	else {
 	    printf("Quicksort FAILED.\n");
 	}
+	free(data);
     }
     else {
 	printf("Error generating test data.\n");

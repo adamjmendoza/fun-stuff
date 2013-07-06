@@ -66,6 +66,7 @@ int main(int argc, char **argv) {
 	    printf("Merge Sort FAILED.\n");
 	    print_test_data(data, length);
 	}
+	free(data);
     }
     else {
 	printf("Error generating test data.\n");
